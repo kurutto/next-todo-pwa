@@ -1,15 +1,15 @@
 "use client";
 import React, { useContext } from "react";
-import { signInWithGoogle } from "@/lib/firebase";
+import { logIn,logOut } from "@/lib/firebase";
 import { AuthContext } from "@/contexts/authContext";
 
 const Header = () => {
-  const currentUser = useContext(AuthContext);
+  const {currentUser} = useContext(AuthContext);
   console.log("currentUser", currentUser);
   return (
     <header>
       ヘッダー
-      <button onClick={signInWithGoogle}>ログイン</button>
+      {currentUser ? <button onClick={logOut}>ログアウト</button> : <button onClick={logIn}>ログイン</button>}
     </header>
   );
 };
