@@ -54,7 +54,7 @@ export const logOut = () => {
     .then(() => {
       document.location.reload();
     })
-    .catch((err) => {
+    .catch(() => {
       console.log("サインアウトエラー");
     });
 };
