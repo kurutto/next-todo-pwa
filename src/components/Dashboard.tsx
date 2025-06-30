@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/contexts/authContext";
 import { logIn } from "@/lib/firebase";
 import * as Api from "@/app/api/todo/route";
@@ -11,20 +11,20 @@ const Dashboard = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<TodoType[]>();
 
-  useEffect(() => {
-    fetchGetTodos();
-  }, [currentUser,]);
-
-
-  const fetchGetTodos = async () => {
+  const fetchGetTodos = useCallback(async () => {
     if (currentUser) {
       const data = await Api.getTodo(currentUser.uid);
       setTodos(data);
     }
-  }
+  },[currentUser]);
+
+  useEffect(() => {
+    fetchGetTodos();
+  }, [currentUser,fetchGetTodos]);
+
   const handlePostTodo = async () => {
     if (inputRef.current?.value && currentUser?.uid) {
-      await Api.addTodo(inputRef.current?.value!, currentUser?.uid);
+      await Api.addTodo(inputRef.current?.value, currentUser?.uid);
       inputRef.current.value = "";
       fetchGetTodos();
     }
