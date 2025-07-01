@@ -1,14 +1,8 @@
 import { db } from "@/lib/firebase";
-import { TodoType } from "@/types/types";
-import { orderBy, serverTimestamp } from "firebase/firestore";
+import { serverTimestamp } from "firebase/firestore";
 import {
   collection,
   addDoc,
-  query,
-  where,
-  getDocs,
-  doc,
-  deleteDoc,
 } from "firebase/firestore";
 
 export async function POST(request:Request){
