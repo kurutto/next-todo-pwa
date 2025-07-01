@@ -5,7 +5,7 @@ import {
 } from "firebase/firestore";
 import {NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { uid:string;id: string } }) {
   try{
     const { id } = await params;
     console.log("id",id);
