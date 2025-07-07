@@ -2,17 +2,22 @@ import { TodoType } from "@/types/types";
 import React from "react";
 
 interface TodoListProps {
-  uid:string;
   todos: TodoType[];
   getTodo: () => void;
 }
-const TodoList = ({ uid, todos, getTodo }: TodoListProps) => {
+const TodoList = ({ todos, getTodo }: TodoListProps) => {
   const handleDeleteTodo = async(id: string) => {
     console.log("delete click")
     await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/todo/${uid}/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/deleteTodo`,
       {
-        method: "DELETE",
+        method: "POST",
+          body: JSON.stringify({
+          id: id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
     getTodo();

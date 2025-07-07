@@ -19,9 +19,15 @@ const Dashboard = () => {
   const fetchGetTodos = useCallback(async () => {
     if (currentUser) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/todo/${currentUser.uid}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/getTodo`,
         {
-          method: "GET",
+          method: "POST",
+          body: JSON.stringify({
+          uid: currentUser.uid,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
         }
       );
       if (!res.ok) {
@@ -38,7 +44,7 @@ const Dashboard = () => {
 
   const handlePostTodo = async () => {
     if (inputRef.current?.value && currentUser?.uid) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/addTodo`, {
         method: "POST",
         body: JSON.stringify({
           content: inputRef.current.value,
@@ -65,7 +71,7 @@ const Dashboard = () => {
         <button onClick={logIn}>ログイン</button>
       )}
       {todos && currentUser && (
-        <TodoList uid={currentUser.uid} todos={todos} getTodo={fetchGetTodos} />
+        <TodoList todos={todos} getTodo={fetchGetTodos} />
       )}
     </div>
   );
