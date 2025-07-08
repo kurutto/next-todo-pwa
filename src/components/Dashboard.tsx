@@ -1,8 +1,13 @@
 "use client";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AuthContext } from "@/contexts/authContext";
 import { logIn } from "@/lib/firebase";
-import * as Api from "@/app/api/todo/route";
 import { TodoType } from "@/types/types";
 import TodoList from "./TodoList";
 
@@ -13,18 +18,42 @@ const Dashboard = () => {
 
   const fetchGetTodos = useCallback(async () => {
     if (currentUser) {
-      const data = await Api.getTodo(currentUser.uid);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/getTodo`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+          uid: currentUser.uid,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch todos");
+      }
+      const data = await res.json();
       setTodos(data);
     }
-  },[currentUser]);
+  }, [currentUser]);
 
   useEffect(() => {
     fetchGetTodos();
-  }, [currentUser,fetchGetTodos]);
+  }, [currentUser, fetchGetTodos]);
 
   const handlePostTodo = async () => {
     if (inputRef.current?.value && currentUser?.uid) {
-      await Api.addTodo(inputRef.current?.value, currentUser?.uid);
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/addTodo`, {
+        method: "POST",
+        body: JSON.stringify({
+          content: inputRef.current.value,
+          uid: currentUser.uid,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       inputRef.current.value = "";
       fetchGetTodos();
     }
@@ -41,7 +70,9 @@ const Dashboard = () => {
       ) : (
         <button onClick={logIn}>ログイン</button>
       )}
-      {todos && <TodoList todos={todos} getTodo={fetchGetTodos} />}
+      {todos && currentUser && (
+        <TodoList todos={todos} getTodo={fetchGetTodos} />
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { deleteTodo } from "@/app/api/todo/route";
 import { TodoType } from "@/types/types";
 import React from "react";
 
@@ -8,7 +7,19 @@ interface TodoListProps {
 }
 const TodoList = ({ todos, getTodo }: TodoListProps) => {
   const handleDeleteTodo = async(id: string) => {
-    await deleteTodo(id);
+    console.log("delete click")
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/deleteTodo`,
+      {
+        method: "POST",
+          body: JSON.stringify({
+          id: id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     getTodo();
   };
   return (
