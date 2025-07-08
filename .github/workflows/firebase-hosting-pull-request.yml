@@ -27,6 +27,14 @@ jobs:
           echo "NEXT_PUBLIC_APP_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_APP_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID }}" >> $GITHUB_ENV
       - run: npm run build
+      - name: Install functions dependencies
+        run: cd functions && npm ci
+      - name: Build functions
+        run: cd functions && npm run build
+      - name: Check firebase-functions version
+        run: cd functions && npm ls firebase-functions
+      - name: Check v2/https existence
+        run: ls -l functions/node_modules/firebase-functions/v2/https.js || echo "not found"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
