@@ -26,11 +26,15 @@ jobs:
           echo "NEXT_PUBLIC_APP_FIREBASE_SENDER_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_SENDER_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_APP_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID }}" >> $GITHUB_ENV
-      - run: npm run build
+      # ここで functions の依存関係を先にインストール
       - name: Install functions dependencies
         run: cd functions && npm ci
+      # ここで functions のビルド
       - name: Build functions
         run: cd functions && npm run build
+      # その後で Next.js のビルド
+      - run: npm run build
+      # デバッグ用
       - name: Check firebase-functions version
         run: cd functions && npm ls firebase-functions
       - name: Check v2/https existence
