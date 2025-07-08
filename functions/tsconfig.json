@@ -2,6 +2,7 @@
   "compilerOptions": {
     "module": "NodeNext",
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"], // ルートの型定義を拾わないようにする
     "types": ["node"], // 無関係な型が入らないようにする
     "moduleResolution": "nodenext",
