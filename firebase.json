@@ -3,15 +3,15 @@
     "public": "out",
     "rewrites": [
       {
-        "source": "/api/**",
+        "source": "/api/getTodo",
         "function": "getTodo"
       },
       {
-        "source": "/api/**",
+        "source": "/api/addTodo",
         "function": "addTodo"
       },
       {
-        "source": "/api/**",
+        "source": "/api/deleteTodo",
         "function": "deleteTodo"
       }
     ],
