@@ -1,11 +1,21 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": "getTodo"
+      },
+      {
+        "source": "/api/**",
+        "function": "addTodo"
+      },
+      {
+        "source": "/api/**",
+        "function": "deleteTodo"
+      }
+    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   },
   "functions": [
     {

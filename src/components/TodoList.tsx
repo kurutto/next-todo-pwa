@@ -9,7 +9,7 @@ const TodoList = ({ todos, getTodo }: TodoListProps) => {
   const handleDeleteTodo = async(id: string) => {
     console.log("delete click")
     await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/deleteTodo`,
+      "api/deleteTodo",
       {
         method: "POST",
           body: JSON.stringify({

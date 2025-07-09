@@ -18,18 +18,15 @@ const Dashboard = () => {
 
   const fetchGetTodos = useCallback(async () => {
     if (currentUser) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/getTodo`,
-        {
-          method: "POST",
-          body: JSON.stringify({
+      const res = await fetch("/api/getTodo", {
+        method: "POST",
+        body: JSON.stringify({
           uid: currentUser.uid,
         }),
         headers: {
           "Content-Type": "application/json",
         },
-        }
-      );
+      });
       if (!res.ok) {
         throw new Error("Failed to fetch todos");
       }
@@ -44,7 +41,7 @@ const Dashboard = () => {
 
   const handlePostTodo = async () => {
     if (inputRef.current?.value && currentUser?.uid) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/addTodo`, {
+      await fetch("api/addTodo", {
         method: "POST",
         body: JSON.stringify({
           content: inputRef.current.value,
