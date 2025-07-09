@@ -4,6 +4,7 @@ import { onRequest } from "firebase-functions/v2/https";
 // The Firebase Admin SDK to access Firestore.
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { serverTimestamp } from "firebase/firestore";
 
 initializeApp();
 
@@ -27,6 +28,8 @@ exports.addTodo = onRequest(async (req, res) => {
   await collectionRef.add({
     content: todo.content,
     uid: todo.uid,
+    isComplete: false,
+    createdAt: serverTimestamp(),
   });
   // Send back a message that we've successfully written the message
   res.status(200).json({ message: "Success" });
