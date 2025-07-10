@@ -1,5 +1,16 @@
 import { onRequest } from "firebase-functions/v2/https";
-// @ts-ignore
-import server from "../../.next/standalone/server.js";//next15ではビルドによってサーバアプリがこの場所に生成される
+import next from "next";
 
-export const nextApp = onRequest(server);
+const app = next({
+  dev: false,
+  conf: {
+    /* 必要ならconfigを渡す */
+  },
+});
+const handle = app.getRequestHandler();
+
+export const nextApp = onRequest((req, res) => {
+  app.prepare().then(() => {
+    handle(req, res);
+  });
+});
