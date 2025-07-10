@@ -1,19 +1,5 @@
 import { onRequest } from "firebase-functions/v2/https";
-import { parse } from "url";
-import next from "next";
+// @ts-ignore
+import server from "../../.next/standalone/server.js";//next15ではビルドによってサーバアプリがこの場所に生成される
 
-const dev = process.env.NODE_ENV !== "production";
-
-const app = next({
-  dev,
-  conf: {
-    distDir: ".output/.next",
-  },
-});
-const handle = app.getRequestHandler();
-
-export const nextApp = onRequest({ timeoutSeconds: 60 }, async (req, res) => {
-  await app.prepare();
-  const parsedUrl = parse(req.url!, true);
-  handle(req, res, parsedUrl);
-});
+export const nextApp = onRequest(server);

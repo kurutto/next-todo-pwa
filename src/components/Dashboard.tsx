@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   const handlePostTodo = async () => {
     if (inputRef.current?.value && currentUser?.uid) {
-      await fetch("api/addTodo", {
+      await fetch("/api/addTodo", {
         method: "POST",
         body: JSON.stringify({
           content: inputRef.current.value,
