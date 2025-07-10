@@ -5,6 +5,9 @@ import { onRequest } from "firebase-functions/v2/https";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
+// Next.js app
+import { nextApp } from "./nextApp";
+
 initializeApp();
 
 const setCorsHeaders = (res: any) => {
@@ -65,3 +68,5 @@ export const deleteTodo = onRequest(async (req, res) => {
   res.status(200).json({ message: "Success" });
   // Grab the text parameter.
 });
+
+export { nextApp };
