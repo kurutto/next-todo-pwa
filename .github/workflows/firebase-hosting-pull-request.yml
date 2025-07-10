@@ -26,14 +26,24 @@ jobs:
           echo "NEXT_PUBLIC_APP_FIREBASE_SENDER_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_SENDER_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_APP_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID }}" >> $GITHUB_ENV
-      # ここで functions の依存関係を先にインストール
+      # functions の依存関係を先にインストール　
+      # プロジェクトルートのtsconfig.jsonがfunctionsディレクトリも型チェック対象に含めている場合、functions配下の依存解決や型エラーがNext.jsのビルド時に発生することがあるため、「先にfunctionsのビルド（型チェック）」をしておくことで、Next.jsのビルド時に不要なエラーを防ぐ
       - name: Install functions dependencies
         run: cd functions && npm ci
-      # ここで functions のビルド
+      # functions のビルド
       - name: Build functions
         run: cd functions && npm run build
-      # その後で Next.js のビルド
+      # Next.js のビルド
       - run: npm run build
+      - name: Copy .next and public to functions
+        run: |
+          cp -r .next functions/
+          cp -r public functions/
+          cp next.config.js functions/
+      - name: Install functions dependencies
+        run: cd functions && npm ci
+      - name: Build functions
+        run: cd functions && npm run build
       # デバッグ用
       - name: Check firebase-functions version
         run: cd functions && npm ls firebase-functions

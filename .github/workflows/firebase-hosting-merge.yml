@@ -25,6 +25,11 @@ jobs:
           echo "NEXT_PUBLIC_APP_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_APP_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_APP_FIREBASE_MEASUREMENT_ID }}" >> $GITHUB_ENV
       - run: npm run build
+      - name: Copy .next and public to functions
+        run: |
+          cp -r .next functions/
+          cp -r public functions/
+          cp next.config.js functions/
       - name: Install functions dependencies
         run: cd functions && npm ci
       - name: Build functions
