@@ -1,6 +1,11 @@
 {
   "hosting": {
-    "public": "public",
+    "public": ".output/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "/api/getTodo",
@@ -14,9 +19,11 @@
         "source": "/api/deleteTodo",
         "function": "deleteTodo"
       },
-      { "source": "**", "destination": "/index.html" }
-    ],
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+      {
+        "source": "**",
+        "function": "nextApp"
+      }
+    ]
   },
   "functions": [
     {

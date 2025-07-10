@@ -3,8 +3,7 @@ import { onRequest } from "firebase-functions/v2/https";
 
 // The Firebase Admin SDK to access Firestore.
 import { initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { serverTimestamp } from "firebase/firestore";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 initializeApp();
 
@@ -17,7 +16,7 @@ const collectionRef = getFirestore().collection("todo");
 
 // Take the text parameter passed to this HTTP endpoint and insert it into
 // Firestore under the path /messages/:documentId/original
-exports.addTodo = onRequest(async (req, res) => {
+export const addTodo = onRequest(async (req, res) => {
   setCorsHeaders(res);
   if (req.method === "OPTIONS") {
     res.status(204).send("");
@@ -29,20 +28,20 @@ exports.addTodo = onRequest(async (req, res) => {
     content: todo.content,
     uid: todo.uid,
     isComplete: false,
-    createdAt: serverTimestamp(),
+    createdAt: FieldValue.serverTimestamp(),
   });
   // Send back a message that we've successfully written the message
   res.status(200).json({ message: "Success" });
   // Grab the text parameter.
 });
 
-exports.getTodo = onRequest(async (req, res) => {
+export const getTodo = onRequest(async (req, res) => {
   setCorsHeaders(res);
   if (req.method === "OPTIONS") {
     res.status(204).send("");
     return; // プリフライトリクエストへの応答
   }
-  const uid = await req.body.uid;
+  const uid = req.body.uid;
   // Push the new message into Firestore using the Firebase Admin SDK.
   const data = await collectionRef.where("uid", "==", uid).get();
   const todos = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -52,7 +51,7 @@ exports.getTodo = onRequest(async (req, res) => {
   // Grab the text parameter.
 });
 
-exports.deleteTodo = onRequest(async (req, res) => {
+export const deleteTodo = onRequest(async (req, res) => {
   setCorsHeaders(res);
   if (req.method === "OPTIONS") {
     res.status(204).send("");
