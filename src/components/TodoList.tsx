@@ -3,23 +3,20 @@ import React from "react";
 
 interface TodoListProps {
   todos: TodoType[];
-  getTodo: () => void;
+  getTodo: () => Promise<void>;
 }
 const TodoList = ({ todos, getTodo }: TodoListProps) => {
-  const handleDeleteTodo = async(id: string) => {
-    console.log("delete click")
-    await fetch(
-      "api/deleteTodo",
-      {
-        method: "POST",
-          body: JSON.stringify({
-          id: id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  const handleDeleteTodo = async (id: string) => {
+    console.log("delete click");
+    await fetch("/api/deleteTodo", {
+      method: "POST",
+      body: JSON.stringify({
+        id: id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     getTodo();
   };
   return (
