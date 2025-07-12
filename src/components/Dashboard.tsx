@@ -22,14 +22,14 @@ const Dashboard = () => {
     const idToken = await currentUser.getIdToken();
     return {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${idToken}`,
+      Authorization: `Bearer ${idToken}`,
       //Authorization ヘッダーは、HTTP通信において「リクエストを送る人が誰かをサーバーに伝えるための情報（認証情報）」を載せるための標準的なHTTPヘッダー
     };
   };
 
   const fetchGetTodos = useCallback(async () => {
     if (!currentUser) return;
-    try{
+    try {
       setError("");
       const headers = await getAuthHeaders();
       const res = await fetch("/api/getTodo", {
@@ -44,11 +44,13 @@ const Dashboard = () => {
       }
       const data = await res.json();
       setTodos(data);
-    }catch(error){
-      console.error('fetchGetTodos error:', error);
-      setError(error instanceof Error ? error.message : "Todo取得に失敗しました");
+    } catch (error) {
+      console.error("fetchGetTodos error:", error);
+      setError(
+        error instanceof Error ? error.message : "Todo取得に失敗しました"
+      );
     }
-  }, [currentUser]);
+  }, [currentUser, getAuthHeaders]);
 
   useEffect(() => {
     fetchGetTodos();
@@ -56,7 +58,7 @@ const Dashboard = () => {
 
   const handlePostTodo = async () => {
     if (!inputRef.current?.value || !currentUser?.uid) return;
-    try{
+    try {
       setError("");
       const headers = await getAuthHeaders();
       const res = await fetch("/api/addTodo", {
@@ -69,17 +71,24 @@ const Dashboard = () => {
       });
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error ||'Todo追加に失敗しました');
+        throw new Error(errorData.error || "Todo追加に失敗しました");
       }
       inputRef.current.value = "";
       await fetchGetTodos();
-    }catch(error){
-      console.error('handlePostTodo error:', error);
-      setError(error instanceof Error ? error.message : "Todo追加に失敗しました");
+    } catch (error) {
+      console.error("handlePostTodo error:", error);
+      setError(
+        error instanceof Error ? error.message : "Todo追加に失敗しました"
+      );
     }
   };
   return (
     <div>
+      {error && (
+        <div style={{ color: "red", marginBottom: "10px" }}>
+          エラー: {error}
+        </div>
+      )}
       {currentUser ? (
         <div>
           <input placeholder="ToDoName" ref={inputRef} />

@@ -40,6 +40,11 @@ const TodoList = ({ todos, getTodo }: TodoListProps) => {
   };
   return (
     <div>
+    {error && (
+      <div style={{ color: 'red', marginBottom: '10px' }}>
+        エラー: {error}
+      </div>
+    )}
       <h2>あなたのToDo</h2>
       <ul>
         {todos.map((todo) => (
